@@ -5,30 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticando...</title>
     <script>
-        // Captura el parámetro 'code' de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
+// Captura el parámetro 'code' de la URL
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get("code");
 
-        if (code) {
-            // Muestra un mensaje de éxito
-            document.write("<h2>Autenticación exitosa. Procesando...</h2>");
+if (code) {
+    // Muestra un mensaje de éxito
+    document.write("<h2>Autenticación exitosa. Procesando...</h2>");
 
-            // Envía el código a tu servidor local
-            fetch("http://localhost:3000/callback?code=" + code)
-                    method: "GET",
-                    credentials: "include"
-                .then(response => response.text())
-                .then(data => {
-                    console.log("Código enviado al servidor:", data);
-                    document.write("<h3>¡Listo! Puedes cerrar esta página.</h3>");
-                })
-                .catch(error => {
-                    console.error("Error al enviar código:", error);
-                    document.write("<h3>Hubo un error. Intenta nuevamente.</h3>");
-                });
-        } else {
-            document.write("<h2>Error: No se recibió código de autenticación.</h2>");
-        }
+    // Envía el código a tu servidor local
+    fetch("http://localhost:3000/callback?code=" + code, {
+        method: "GET",
+        credentials: "include" // Asegúrate de tener "credentials: 'include'" si necesitas enviar cookies
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log("Código enviado al servidor:", data);
+        document.write("<h3>¡Listo! Puedes cerrar esta página.</h3>");
+    })
+    .catch(error => {
+        console.error("Error al enviar código:", error);
+        document.write("<h3>Hubo un error. Intenta nuevamente.</h3>");
+    });
+} else {
+    document.write("<h2>Error: No se recibió código de autenticación.</h2>");
+}
     </script>
 </head>
 <body>

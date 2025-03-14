@@ -7,14 +7,22 @@
 </head>
 <body>
     <h2 id="status">Procesando autenticación...</h2>
+
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
+        window.onload = function() {
+            console.log("🔹 DOM completamente cargado.");
+
             const statusElement = document.getElementById("status");
+            if (!statusElement) {
+                console.error("⚠️ Error: No se encontró el elemento #status");
+                return;
+            }
+
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get("code");
 
             if (code) {
-                statusElement.innerHTML = "Autenticación exitosa. Procesando...";
+                statusElement.innerText = "Autenticación exitosa. Procesando...";
 
                 fetch("http://localhost:3000/callback", {
                     method: "POST",
@@ -24,17 +32,17 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("Código enviado al servidor:", data);
-                    statusElement.innerHTML = "¡Listo! Puedes cerrar esta página.";
+                    console.log("✅ Código enviado al servidor:", data);
+                    statusElement.innerText = "¡Listo! Puedes cerrar esta página.";
                 })
                 .catch(error => {
-                    console.error("Error al enviar código:", error);
-                    statusElement.innerHTML = "Hubo un error. Intenta nuevamente.";
+                    console.error("⚠️ Error al enviar código:", error);
+                    statusElement.innerText = "Hubo un error. Intenta nuevamente.";
                 });
             } else {
-                statusElement.innerHTML = "Error: No se recibió código de autenticación.";
+                statusElement.innerText = "⚠️ Error: No se recibió código de autenticación.";
             }
-        });
+        };
     </script>
 </body>
 </html>

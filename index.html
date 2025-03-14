@@ -4,33 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticando...</title>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get("code");
-
-        if (code) {
-            document.body.innerHTML = "<h2>Autenticación exitosa. Procesando...</h2>";
-
-            fetch("http://localhost:3000/callback", {
-                method: "POST",
-                credentials: "include",  // Importante para enviar la cookie de sesión
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code })  // Enviamos el código como JSON en el cuerpo
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Código enviado al servidor:", data);
-                document.body.innerHTML += "<h3>¡Listo! Puedes cerrar esta página.</h3>";
-            })
-            .catch(error => {
-                console.error("Error al enviar código:", error);
-                document.body.innerHTML += "<h3>Hubo un error. Intenta nuevamente.</h3>";
-            });
-        } else {
-            document.body.innerHTML = "<h2>Error: No se recibió código de autenticación.</h2>";
-        }
-    </script>
 </head>
 <body>
+    <h2 id="status">Procesando autenticación...</h2>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const statusElement = document.getElementById("status");
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get("code");
+
+            if (code) {
+                statusElement.innerHTML = "Autenticación exitosa. Procesando...";
+
+                fetch("http://localhost:3000/callback", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ code }) 
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Código enviado al servidor:", data);
+                    statusElement.innerHTML = "¡Listo! Puedes cerrar esta página.";
+                })
+                .catch(error => {
+                    console.error("Error al enviar código:", error);
+                    statusElement.innerHTML = "Hubo un error. Intenta nuevamente.";
+                });
+            } else {
+                statusElement.innerHTML = "Error: No se recibió código de autenticación.";
+            }
+        });
+    </script>
 </body>
 </html>

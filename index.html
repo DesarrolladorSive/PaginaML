@@ -14,7 +14,7 @@ if (code) {
     document.write("<h2>Autenticación exitosa. Procesando...</h2>");
 
     // Envía el código a tu servidor local
-    fetch("http://localhost:3000/callback?code=" + code, {
+    fetch("http://localhost:3000/callback?code=TG-67d45fe03796c20001609f46-1606710266", {
         method: "GET",
         credentials: "include"  // Asegúrate de tener "credentials: 'include'" si necesitas enviar cookies
     })

@@ -24,7 +24,7 @@
             if (code) {
                 statusElement.innerText = "Autenticación exitosa. Procesando...";
 
-                fetch("http://localhost:3000/callback", {
+                fetch("https://pruebainventario.onrender.com/callback", {
                     method: "POST",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },

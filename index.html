@@ -1,48 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autenticando...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autenticando con Mercado Libre</title>
 </head>
 <body>
-    <h2 id="status">Procesando autenticación...</h2>
+  <h2 id="status">Procesando autenticación con Mercado Libre...</h2>
 
-    <script>
-        window.onload = function() {
-            console.log("🔹 DOM completamente cargado.");
+  <script>
+    window.onload = function () {
+      const statusElement = document.getElementById("status");
 
-            const statusElement = document.getElementById("status");
-            if (!statusElement) {
-                console.error("⚠️ Error: No se encontró el elemento #status");
-                return;
-            }
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get("code");
+      if (!code) {
+        statusElement.innerText = "⚠️ No se encontró ningún código de autorización en la URL.";
+        return;
+      }
 
-            if (code) {
-                statusElement.innerText = "Autenticación exitosa. Procesando...";
+      statusElement.innerHTML = `
+        <h3>✅ Authorization Code:</h3>
+        <pre style="background:#eee;padding:10px">${code}</pre>
+        <p>Copialo y pegalo en tu archivo <code>.env</code> para continuar.</p>
+      `;
 
-                fetch("https://pruebainventario.onrender.com/callback", {
-                    method: "POST",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ code }) 
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("✅ Código enviado al servidor:", data);
-                    statusElement.innerText = "¡Listo! Puedes cerrar esta página.";
-                })
-                .catch(error => {
-                    console.error("⚠️ Error al enviar código:", error);
-                    statusElement.innerText = "Hubo un error. Intenta nuevamente.";
-                });
-            } else {
-                statusElement.innerText = "⚠️ Error: No se recibió código de autenticación.";
-            }
-        };
-    </script>
+      console.log("🔑 Código copiado:", code);
+    };
+  </script>
 </body>
 </html>
